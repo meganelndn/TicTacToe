@@ -1,55 +1,55 @@
-const boxes = document.querySelectorAll('.box');
-const text = document.querySelector('#heading');
-const result = document.querySelector('#result');
-const restartBtn = document.querySelector('#restart');
+const boxes = document.querySelectorAll(".box");
+const text = document.querySelector("#heading");
+const result = document.querySelector("#result");
+const restartBtn = document.querySelector("#restart");
 
 const spaces = [];
-const tick_circle = 'O';
-const tick_x = 'X';
-let currentPlayer = tick_circle;
+const circle = "O";
+const cross = "X";
+let currentPlayer = circle;
 
 const drawBoard = () => {
   boxes.forEach((box, i) => {
-    let styleString = '';
+    let styleString = "";
+
     if (i < 3) {
-      styleString += 'border-bottom: 3px solid var(--text);';
+      styleString += "border-bottom: 3px solid var(--text);";
     }
     if (i % 3 === 0) {
-      styleString += 'border-right: 3px solid var(--text);';
+      styleString += "border-right: 3px solid var(--text);";
     }
     if (i % 3 === 2) {
-      styleString += 'border-left: 3px solid var(--text);';
+      styleString += "border-left: 3px solid var(--text);";
     }
     if (i > 5) {
-      styleString += 'border-top: 3px solid var(--text);';
+      styleString += "border-top: 3px solid var(--text);";
     }
+
     box.style = styleString;
-    box.addEventListener('click', boxClicked);
+    box.addEventListener("click", boxClicked);
   });
 };
 
 const boxClicked = (e) => {
   const id = e.target.id;
-  console.log(e);
+  //console.log(e);
   if (!spaces[id]) {
-    console.log(spaces[id]);
+    //console.log(spaces[id]);
     spaces[id] = currentPlayer;
     e.target.innerText = currentPlayer;
 
-    if (playerWon()) {
-      text.innerText = `${currentPlayer} wins!`;
-      restart();
+    if (playerWins()) {
+      text.innerText = `Player ${currentPlayer} wins!`;
+      return;
+    } else if (playerDraw()) {
       return;
     }
 
-    if (playerDraw()) {
-      return;
-    }
-    currentPlayer = currentPlayer === tick_circle ? tick_x : tick_circle;
+    currentPlayer = currentPlayer === circle ? cross : circle;
   }
 };
 
-const playerWon = () => {
+const playerWins = () => {
   if (spaces[0] === currentPlayer) {
     if (spaces[1] === currentPlayer && spaces[2] === currentPlayer) {
       return true;
@@ -88,23 +88,17 @@ const playerDraw = () => {
     if (spaces[i] !== null) draw++;
   });
   if (draw === 9) {
-    text.innerText = `Draw`;
-    restart();
+    text.innerText = `It's a draw!`;
   }
 };
 
-const restart = () => {
-  setTimeout(() => {
-    spaces.forEach((space, i) => {
-      spaces[i] = null;
-    });
-    boxes.forEach((box) => {
-      box.innerText = '';
-    });
-    text.innerText = `Play`;
-    result.innerText = ``;
-  }, 10000);
+/* const restart = () => {
+    window.location.reload(true);
 };
-restartBtn.addEventListener('click', restart);
-restart();
+restartBtn.addEventListener("click", restart); */
+
+restartBtn.addEventListener("click", () => {
+    window.location.reload(true);
+});
+
 drawBoard();
